@@ -3,50 +3,19 @@ from collections import Counter
 
 
 def main():
-    # book_name = input(
-    #     "Please enter the name of the text file, including the extension: "
-    # )
     try:
         # Opens text file and stores in memory as file object
         with open("alice.txt") as f_obj:
-            word_frequncy_in_text = wordFreq(f_obj.read())
-            # print(word_frequncy_in_text.get("the"))
-            output = printOut(word_frequncy_in_text)
-            print(output)
+            word_frequncy_in_text = word_freq(f_obj.read())
+            my_list = dict_to_list(word_frequncy_in_text)
+            sorted_list = sort_lists_by_occurrence(my_list)
+            print(print_list(sorted_list))
+
     except FileNotFoundError:
         print("File does not exist")
 
 
-def wordFreq(contents: str):
-    # This commented code was my original soution
-    # I found that the Counter makes the code more readable and consie
-    # punctuation_list = list(string.punctuation)
-    # characters_in_book = contents.split()
-    # print(characters_in_book)
-
-    # cleaned_words = [
-    #     word for word in characters_in_book if word not in punctuation_list
-    # ]
-
-    # print(cleaned_words)
-    # # cleaned_words = []
-    # # for word in characters_in_book:
-    # #     if word:
-    # #         cleaned_word = "".join(
-    # #             char for char in word if char not in punctuation_list
-    # #         )
-    # #         if cleaned_word:  # Check if the cleaned word is not empty
-    # #             cleaned_words.append(cleaned_word)
-
-    # # # Counts the occurences of every word and adds them to the dictionary
-    # word_occurrence = {}
-    # for word in cleaned_words:
-    #     if word.lower() not in word_occurrence:
-    #         word_occurrence[word.lower()] = 1
-    #     elif word.lower() in word_occurrence:
-    #         word_occurrence[word.lower()] += 1
-
-    #############
+def word_freq(contents: str):
     punctuation_list = list(string.punctuation)
     words = re.findall(r"\b[\w\']+\'?[\w]+\b", contents.lower())
 
@@ -59,7 +28,17 @@ def wordFreq(contents: str):
     return word_occurrence
 
 
-def printOut(words_freq: object):
+def dict_to_list(word_freq: dict):
+    occurrences = [[word, occurrence] for word, occurrence in word_freq.items()]
+    return occurrences
+
+
+def sort_lists_by_occurrence(input_list: list):
+    sorted_list = sorted(input_list, key=lambda x: x[1])
+    return sorted_list
+
+
+def print_dict(words_freq: dict):
     output = ""
     for key, value in sorted(words_freq.items()):
         output += f"{key} :: {value}\n"
@@ -67,29 +46,12 @@ def printOut(words_freq: object):
     return output
 
 
+def print_list(word_freq: list):
+    output = ""
+    for i in word_freq:
+        output += f"{i[0]} :: {i[1]}\n"
+    return output
+
+
 if __name__ == "__main__":
     main()
-
-
-# def wordFreq(contents):
-#     This commented code was my original soution
-#     I found that the Counter makes the code more readable and consie
-#     punctuation_list = list(string.punctuation)
-#     characters_in_book = contents.split()
-
-#     cleaned_words = []
-#     for word in characters_in_book:
-#         if word:
-#             cleaned_word = "".join(
-#                 char for char in word if char not in punctuation_list
-#             )
-#             if cleaned_word:  # Check if the cleaned word is not empty
-#                 cleaned_words.append(cleaned_word)
-
-#     # Counts the occurences of every word and adds them to the dictionary
-#     word_occurrence = {}
-#     for word in cleaned_words:
-#         if word.lower() not in word_occurrence:
-#             word_occurrence[word.lower()] = 1
-#         elif word.lower() in word_occurrence:
-#             word_occurrence[word.lower()] += 1
